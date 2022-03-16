@@ -1,15 +1,10 @@
 package com.kbe.application.models.calculatorAPI;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class VAT {
     private double vatPrice;
-
-    public VAT(){}
-
-    public double getVatPrice() {
-        return vatPrice;
-    }
-
-    public void setVatPrice(double vatPrice) {
-        this.vatPrice = vatPrice;
-    }
 }
