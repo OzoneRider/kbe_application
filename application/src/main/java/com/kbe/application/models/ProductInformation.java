@@ -1,11 +1,10 @@
 package com.kbe.application.models;
 
 import com.kbe.application.models.storageAPI.DeliveryInformation;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductInformation {

@@ -1,4 +1,4 @@
-package com.kbe.application.services;
+package com.kbe.application.services.calculatorAPI;
 
 import com.kbe.application.models.Product;
 import com.kbe.application.models.calculatorAPI.VAT;
