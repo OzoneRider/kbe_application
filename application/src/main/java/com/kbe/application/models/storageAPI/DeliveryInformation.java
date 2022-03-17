@@ -10,7 +10,6 @@ public class DeliveryInformation {
 
     private int productId;
     private Location productLocation;
-    private String deliveryTime;
+    private int deliveryTimeDays;
     private int amount;
-    private double vat;
 }
