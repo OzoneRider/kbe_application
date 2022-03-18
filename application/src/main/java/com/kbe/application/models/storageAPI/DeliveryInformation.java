@@ -14,11 +14,14 @@ public class DeliveryInformation {
 
     @Min(0)
     private int productId;
+
     @NotNull
     private Location productLocation;
+
     @Min(1)
     @Max(100)
     private int deliveryTimeDays;
+
     @Min(1)
     @Max(3)
     private int amount;

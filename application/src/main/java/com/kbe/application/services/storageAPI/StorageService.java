@@ -10,5 +10,5 @@ public class StorageService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private String URL = "http://kbe-storage";
+    private final String URL = "http://kbe-storage";
 }

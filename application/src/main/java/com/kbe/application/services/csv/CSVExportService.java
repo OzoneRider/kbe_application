@@ -20,7 +20,7 @@ public class CSVExportService {
     @Autowired
     private ProductService productService;
 
-    public void exportCSV() throws IOException {
+    public void exportCsvToFolder(){
         String path = System.getProperty("java.io.tmpdir");
         File file = new File(path, "products.csv");
 
@@ -40,7 +40,7 @@ public class CSVExportService {
                 csvWriter.write(product, nameMapping);
             }
             csvWriter.close();
-        }catch (Exception e){
+        }catch (IOException e){
             e.getStackTrace();
         }
     }

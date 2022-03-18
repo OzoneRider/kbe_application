@@ -13,6 +13,7 @@ public class ProductInformation {
 
     @NotNull
     private Product product;
+
     @NotNull
     private DeliveryInformation deliveryInformation;
 }
