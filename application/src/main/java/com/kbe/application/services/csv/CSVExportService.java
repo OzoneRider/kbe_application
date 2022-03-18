@@ -29,8 +29,8 @@ public class CSVExportService {
         try{
             FileWriter fileWriter = new FileWriter(file);
             ICsvBeanWriter csvWriter = new CsvBeanWriter(fileWriter, CsvPreference.STANDARD_PREFERENCE);
-            String[] csvHeader = {"Product Id", "Name", "Price Euro", "Manufacturer", "Display Size Inches", "Color",
-                                  "Refresh Rate Hz", "Weight Kg", "Reaction Time Ms", "Display Interface", "Resolution"};
+            String[] csvHeader = {"productId", "name", "priceEuro", "manufacturer", "displaySizeInches", "color",
+                                  "refreshRateHz", "weightKg", "reactionTimeMs", "displayInterface", "resolution"};
             String[] nameMapping = {"productId", "name", "priceEuro", "manufacturer", "displaySizeInches", "color",
                                     "refreshRateHz", "weightKg", "reactionTimeMs", "displayInterface", "resolution"};
 
