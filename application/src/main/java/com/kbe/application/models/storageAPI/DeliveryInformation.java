@@ -57,4 +57,14 @@ public class DeliveryInformation {
 
         return result;
     }
+
+    @Override
+    public String toString(){
+
+        return "{\n\t\"productId\":\""+this.productId+"\",\n" +
+                "\t\"deliveryTimeDays\":\""+this.deliveryTimeDays+"\",\n" +
+                "\t\"amount\":\""+this.amount+"\",\n"+
+                "\t\"location\": "+this.productLocation.toString()+
+                "}\n";
+    }
 }

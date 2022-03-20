@@ -53,6 +53,7 @@ public class Location {
         return countryEquals && cityEquals && streetEquals && homeNrEquals && postalCodeEquals;
     }
 
+    @Override
     public final int hashCode(){
         int result = 17;
         if(country != null){
@@ -72,5 +73,16 @@ public class Location {
         }
 
         return result;
+    }
+
+    @Override
+    public String toString(){
+
+        return "{\n\t\"country\":\" "+this.country+"\",\n" +
+                "\t\"city\":\" "+this.city+"\",\n" +
+                "\t\"street\":\" "+this.street+"\",\n"+
+                "\t\"homeNr\":\" "+this.homeNr+"\",\n"+
+                "\t\"postalCode\":\" "+this.postalCode+"\"\n"+
+                "}\n";
     }
 }

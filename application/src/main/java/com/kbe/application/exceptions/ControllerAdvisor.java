@@ -30,7 +30,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DeliveryInformationNotFoundException.class)
-    public ResponseEntity<Object> handleNoDeliveryInformationException(DeliveryInformationNotFoundException e,
+    public ResponseEntity<Object> handleDeliveryInformationNotFoundException(DeliveryInformationNotFoundException e,
                                                                        WebRequest webRequest){
 
         Map<String, Object> body = new LinkedHashMap<>();
@@ -38,6 +38,27 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("message", "Delivery information not found");
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductNotCreatedException.class)
+    public ResponseEntity<Object> handleProductNotCreatedException(ProductNotFoundException e, WebRequest webRequest){
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "Product not created");
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DeliveryInformationNotCreatedException.class)
+    public ResponseEntity<Object> handleDeliveryInformationNotCreatedException(DeliveryInformationNotFoundException e,
+                                                                       WebRequest webRequest){
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "Delivery information not created");
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoProductDataException.class)

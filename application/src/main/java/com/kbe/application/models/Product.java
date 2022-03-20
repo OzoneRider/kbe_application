@@ -122,4 +122,20 @@ public class Product implements Serializable {
         }
         return result;
     }
+
+    @Override
+    public String toString(){
+
+        return "{\n\t\"name\":\" "+this.name+"\",\n" +
+                "\t\"priceEuro\":\" "+this.priceEuro.toString()+"\",\n" +
+                "\t\"manufacturer\":\" "+this.manufacturer+"\",\n"+
+                "\t\"displaySizeInches\":\" "+this.displaySizeInches.toString()+"\",\n"+
+                "\t\"color\":\" "+this.color+"\"\n"+
+                "\t\"refreshRateHz\":\" "+this.refreshRateHz+"\",\n" +
+                "\t\"weightKg\":\" "+this.weightKg.toString()+"\",\n"+
+                "\t\"reactionTimeMs\":\" "+this.reactionTimeMs+"\",\n"+
+                "\t\"displayInterface\":\" "+this.displayInterface+"\"\n"+
+                "\t\"resolution\":\" "+this.resolution+"\"\n"+
+                "}\n";
+    }
 }
