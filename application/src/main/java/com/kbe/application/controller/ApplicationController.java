@@ -1,19 +1,21 @@
 package com.kbe.application.controller;
 
+import com.kbe.application.exceptions.DeliveryInformationNotFoundException;
+import com.kbe.application.exceptions.NoProductDataException;
+import com.kbe.application.exceptions.ProductNotFoundException;
 import com.kbe.application.models.Product;
 import com.kbe.application.models.ProductInformation;
+import com.kbe.application.models.calculatorAPI.VAT;
 import com.kbe.application.models.storageAPI.DeliveryInformation;
 import com.kbe.application.services.ProductService;
 import com.kbe.application.services.calculatorAPI.CalculatorService;
 import com.kbe.application.services.csv.CSVExportService;
 import com.kbe.application.services.storageAPI.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,26 +23,43 @@ import java.util.List;
 public class ApplicationController {
 
     @Autowired
-    private RestTemplate restTemplate;
+    RestTemplate restTemplate;
     @Autowired
-    private CalculatorService calculatorService;
+    CalculatorService calculatorService;
     @Autowired
-    private StorageService storageService;
+    ProductService productService;
     @Autowired
-    private ProductService productService;
+    StorageService storageService;
     @Autowired
     CSVExportService csvExportService;
 
     @GetMapping("products")
     public List<Product> getAllProducts(){
-        return productService.getProducts();
+        List<Product> products = productService.getProducts();
+
+        if(products.isEmpty())
+            throw new NoProductDataException();
+
+        return products;
     }
 
     @GetMapping("products/{id}")
     public ProductInformation getProductInformation(@PathVariable("id") int id){
         Product product = productService.getProductById(id);
         DeliveryInformation deliveryInformation = storageService.importDeliveryInformation(id);
-        return null;
+        VAT vat = calculatorService.calculateVAT(product);
+
+        if(product == null)
+            throw new ProductNotFoundException(id);
+        else if(deliveryInformation == null)
+            throw new DeliveryInformationNotFoundException(id);
+
+        return new ProductInformation(product, deliveryInformation, vat.getVatPrice());
+    }
+
+    @PostMapping("products")
+    public Product postProduct(@Valid @RequestBody Product product){
+        productService.saveProduct(product);
     }
 
 
