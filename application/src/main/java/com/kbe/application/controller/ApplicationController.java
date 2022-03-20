@@ -1,8 +1,6 @@
 package com.kbe.application.controller;
 
-import com.kbe.application.exceptions.DeliveryInformationNotFoundException;
-import com.kbe.application.exceptions.NoProductDataException;
-import com.kbe.application.exceptions.ProductNotFoundException;
+import com.kbe.application.exceptions.*;
 import com.kbe.application.models.Product;
 import com.kbe.application.models.ProductInformation;
 import com.kbe.application.models.calculatorAPI.VAT;
@@ -59,8 +57,57 @@ public class ApplicationController {
 
     @PostMapping("products")
     public Product postProduct(@Valid @RequestBody Product product){
+
         productService.saveProduct(product);
+        Product temp = productService.getProductById(product.getProductId());
+
+        if(temp == null && !temp.equals(product))
+            throw new ProductNotCreatedException(product);
+
+        csvExportService.exportCsvToFolder();
+
+        return product;
     }
 
+    @PostMapping("products/{id}/delivery-information")
+    public DeliveryInformation deliveryInformation(@Valid @RequestBody DeliveryInformation deliveryInformation,
+                                                   @PathVariable("id") Integer id){
 
+        if(id != deliveryInformation.getProductId())
+            throw new ProductNotFoundException(deliveryInformation.getProductId());
+
+        DeliveryInformation temp = storageService.exportDeliveryInformation(deliveryInformation);
+
+        if(temp == null)
+            throw new DeliveryInformationNotCreatedException(deliveryInformation);
+
+        return deliveryInformation;
+    }
+
+    @PutMapping("products/{id}")
+    public Product updateProduct(@Valid @RequestBody Product product, @PathVariable("id") Integer id){
+
+        if(id != product.getProductId())
+            throw new ProductNotFoundException(product.getProductId());
+
+        productService.updateProduct(product);
+
+        return product;
+    }
+
+    @PutMapping("products/{id}/delivery-information")
+    public DeliveryInformation updateDeliveryInformation(@Valid @RequestBody DeliveryInformation deliveryInformation,
+                                                         @PathVariable("id") Integer id){
+
+        if(id != deliveryInformation.getProductId())
+            throw new ProductNotFoundException(deliveryInformation.getProductId());
+
+        DeliveryInformation temp = storageService.updateDeliveryInformation(id, deliveryInformation);
+
+        if(temp == null)
+            throw new DeliveryInformationNotFoundException(id);
+
+        return temp;
+    }
+    
 }
