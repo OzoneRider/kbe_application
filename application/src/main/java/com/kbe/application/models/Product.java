@@ -18,14 +18,16 @@ public class Product implements Serializable {
     @NotNull
     private String name;
 
-    @DecimalMin("10.0")
-    @DecimalMax("5000.0")
+    @NotNull
+    @DecimalMin("10.00")
+    @DecimalMax("5000.00")
     @Digits(integer = 4, fraction = 2)
     private BigDecimal priceEuro;
 
     @NotNull
     private String manufacturer;
 
+    @NotNull
     @DecimalMin("10.0")
     @DecimalMax("50.0")
     @Digits(integer = 2, fraction = 1)
@@ -38,6 +40,7 @@ public class Product implements Serializable {
     @Max(360)
     private int refreshRateHz;
 
+    @NotNull
     @DecimalMin("0.25")
     @DecimalMax("15.0")
     @Digits(integer = 2, fraction = 3)

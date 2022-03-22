@@ -4,10 +4,12 @@ import com.kbe.application.exceptions.*;
 import com.kbe.application.models.Product;
 import com.kbe.application.models.ProductInformation;
 import com.kbe.application.models.calculatorAPI.VAT;
+import com.kbe.application.models.externalAPI.GeoCode;
 import com.kbe.application.models.storageAPI.DeliveryInformation;
 import com.kbe.application.services.ProductService;
 import com.kbe.application.services.calculatorAPI.CalculatorService;
 import com.kbe.application.services.csv.CSVExportService;
+import com.kbe.application.services.externalAPI.MapService;
 import com.kbe.application.services.storageAPI.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,8 @@ public class ApplicationController {
     StorageService storageService;
     @Autowired
     CSVExportService csvExportService;
+    @Autowired
+    MapService mapService;
 
     @GetMapping("products")
     public List<Product> getAllProducts(){
@@ -42,7 +46,7 @@ public class ApplicationController {
     }
 
     @GetMapping("products/{id}")
-    public ProductInformation getProductInformation(@PathVariable("id") int id){
+    public ProductInformation getProductInformation(@PathVariable("id") Integer id){
         Product product = productService.getProductById(id);
         DeliveryInformation deliveryInformation = storageService.importDeliveryInformation(id);
         VAT vat = calculatorService.calculateVAT(product);
@@ -53,6 +57,12 @@ public class ApplicationController {
             throw new DeliveryInformationNotFoundException(id);
 
         return new ProductInformation(product, deliveryInformation, vat.getVatPrice());
+    }
+
+    @GetMapping("products/{id}/delivery-information/geo")
+    public GeoCode getGeoCode(@PathVariable Integer id){
+        DeliveryInformation deliveryInformation = storageService.importDeliveryInformation(id);
+        return mapService.getGeoCoordinates(deliveryInformation.getProductLocation());
     }
 
     @PostMapping("products")
@@ -109,5 +119,5 @@ public class ApplicationController {
 
         return temp;
     }
-    
+
 }

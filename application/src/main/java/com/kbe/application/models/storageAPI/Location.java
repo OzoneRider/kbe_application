@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Location {
+
+
     @NotNull
     @Size(min = 1, max = 50)
     private String country;

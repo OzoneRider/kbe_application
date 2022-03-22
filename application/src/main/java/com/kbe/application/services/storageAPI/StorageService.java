@@ -17,7 +17,7 @@ public class StorageService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String URL = "http://kbe-storage/DeliveryInformation";
+    private final String URL = "http://localhost:4442/DeliveryInformation";
 
     public DeliveryInformation importDeliveryInformation(int id){
         return restTemplate.getForObject(URL+"/"+id, DeliveryInformation.class);
