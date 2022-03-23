@@ -6,6 +6,7 @@ import lombok.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,4 +22,7 @@ public class ProductInformation {
 
     @DecimalMin("0.0")
     private BigDecimal vat;
+
+    @NotNull
+    private LocalDate deliveryDate;
 }

@@ -6,6 +6,7 @@ import com.kbe.application.models.ProductInformation;
 import com.kbe.application.models.calculatorAPI.VAT;
 import com.kbe.application.models.externalAPI.GeoCode;
 import com.kbe.application.models.storageAPI.DeliveryInformation;
+import com.kbe.application.services.DeliveryDateService;
 import com.kbe.application.services.ProductService;
 import com.kbe.application.services.calculatorAPI.CalculatorService;
 import com.kbe.application.services.csv.CSVExportService;
@@ -16,14 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/")
 public class ApplicationController {
 
-    @Autowired
-    RestTemplate restTemplate;
     @Autowired
     CalculatorService calculatorService;
     @Autowired
@@ -34,6 +34,8 @@ public class ApplicationController {
     CSVExportService csvExportService;
     @Autowired
     MapService mapService;
+    @Autowired
+    DeliveryDateService deliveryDateService;
 
     @GetMapping("products")
     public List<Product> getAllProducts(){
@@ -48,15 +50,18 @@ public class ApplicationController {
     @GetMapping("products/{id}")
     public ProductInformation getProductInformation(@PathVariable("id") Integer id){
         Product product = productService.getProductById(id);
-        DeliveryInformation deliveryInformation = storageService.importDeliveryInformation(id);
+        DeliveryInformation info = storageService.importDeliveryInformation(id);
         VAT vat = calculatorService.calculateVAT(product);
+        LocalDate deliveryDate = deliveryDateService.getDeliveryDate(info.getDeliveryTimeDays());
 
         if(product == null)
             throw new ProductNotFoundException(id);
-        else if(deliveryInformation == null)
+        else if(info == null)
             throw new DeliveryInformationNotFoundException(id);
 
-        return new ProductInformation(product, deliveryInformation, vat.getVatPrice());
+        return new ProductInformation(product, info,
+                calculatorService.calculateVAT(product).getVatPrice(),
+                deliveryDateService.getDeliveryDate(info.getDeliveryTimeDays()));
     }
 
     @GetMapping("products/{id}/delivery-information/geo")
@@ -80,18 +85,18 @@ public class ApplicationController {
     }
 
     @PostMapping("products/{id}/delivery-information")
-    public DeliveryInformation deliveryInformation(@Valid @RequestBody DeliveryInformation deliveryInformation,
+    public DeliveryInformation deliveryInformation(@Valid @RequestBody DeliveryInformation info,
                                                    @PathVariable("id") Integer id){
 
-        if(id != deliveryInformation.getProductId())
-            throw new ProductNotFoundException(deliveryInformation.getProductId());
+        if(id != info.getProductId())
+            throw new ProductNotFoundException(info.getProductId());
 
-        DeliveryInformation temp = storageService.exportDeliveryInformation(deliveryInformation);
+        DeliveryInformation temp = storageService.exportDeliveryInformation(info);
 
         if(temp == null)
-            throw new DeliveryInformationNotCreatedException(deliveryInformation);
+            throw new DeliveryInformationNotCreatedException(info);
 
-        return deliveryInformation;
+        return info;
     }
 
     @PutMapping("products/{id}")
@@ -106,13 +111,13 @@ public class ApplicationController {
     }
 
     @PutMapping("products/{id}/delivery-information")
-    public DeliveryInformation updateDeliveryInformation(@Valid @RequestBody DeliveryInformation deliveryInformation,
+    public DeliveryInformation updateDeliveryInformation(@Valid @RequestBody DeliveryInformation info,
                                                          @PathVariable("id") Integer id){
 
-        if(id != deliveryInformation.getProductId())
-            throw new ProductNotFoundException(deliveryInformation.getProductId());
+        if(id != info.getProductId())
+            throw new ProductNotFoundException(info.getProductId());
 
-        DeliveryInformation temp = storageService.updateDeliveryInformation(id, deliveryInformation);
+        DeliveryInformation temp = storageService.updateDeliveryInformation(id, info);
 
         if(temp == null)
             throw new DeliveryInformationNotFoundException(id);
