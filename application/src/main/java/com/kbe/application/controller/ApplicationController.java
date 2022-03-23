@@ -12,6 +12,7 @@ import com.kbe.application.services.calculatorAPI.CalculatorService;
 import com.kbe.application.services.csv.CSVExportService;
 import com.kbe.application.services.externalAPI.MapService;
 import com.kbe.application.services.storageAPI.StorageService;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -44,6 +45,7 @@ public class ApplicationController {
         if(products.isEmpty())
             throw new NoProductDataException();
 
+
         return products;
     }
 
@@ -56,8 +58,10 @@ public class ApplicationController {
 
         if(product == null)
             throw new ProductNotFoundException(id);
+
         else if(info == null)
             throw new DeliveryInformationNotFoundException(id);
+
 
         return new ProductInformation(product, info,
                 calculatorService.calculateVAT(product).getVatPrice(),
@@ -79,6 +83,7 @@ public class ApplicationController {
         if(temp == null && !temp.equals(product))
             throw new ProductNotCreatedException(product);
 
+
         csvExportService.exportCsvToFolder();
 
         return product;
@@ -90,6 +95,7 @@ public class ApplicationController {
 
         if(id != info.getProductId())
             throw new ProductNotFoundException(info.getProductId());
+
 
         DeliveryInformation temp = storageService.exportDeliveryInformation(info);
 
@@ -105,6 +111,7 @@ public class ApplicationController {
         if(id != product.getProductId())
             throw new ProductNotFoundException(product.getProductId());
 
+
         productService.updateProduct(product);
 
         return product;
@@ -117,10 +124,12 @@ public class ApplicationController {
         if(id != info.getProductId())
             throw new ProductNotFoundException(info.getProductId());
 
+
         DeliveryInformation temp = storageService.updateDeliveryInformation(id, info);
 
         if(temp == null)
             throw new DeliveryInformationNotFoundException(id);
+
 
         return temp;
     }

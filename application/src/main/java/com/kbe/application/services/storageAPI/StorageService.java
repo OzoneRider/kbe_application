@@ -2,6 +2,7 @@ package com.kbe.application.services.storageAPI;
 
 import com.fasterxml.jackson.databind.deser.SettableBeanProperty;
 import com.kbe.application.models.storageAPI.DeliveryInformation;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@CommonsLog
 public class StorageService {
 
     @Autowired
@@ -37,7 +39,7 @@ public class StorageService {
             ResponseEntity<DeliveryInformation> response = restTemplate.exchange(requestURL, HttpMethod.PUT, entity, DeliveryInformation.class);
             return response.getBody();
         }catch(HttpStatusCodeException e){
-            e.getStatusCode();
+            log.error(e.getMessage());
         }
         return null;
     }

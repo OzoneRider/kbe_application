@@ -3,6 +3,7 @@ package com.kbe.application.services.csv;
 
 import com.kbe.application.models.Product;
 import com.kbe.application.services.ProductService;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.supercsv.io.CsvBeanWriter;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
+@CommonsLog
 public class CSVExportService {
 
     @Autowired
@@ -41,7 +43,7 @@ public class CSVExportService {
             }
             csvWriter.close();
         }catch (IOException e){
-            e.getStackTrace();
+            log.error(e.getMessage());
         }
     }
 }
