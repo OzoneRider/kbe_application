@@ -44,31 +44,19 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ProductNotCreatedException.class)
-    public ResponseEntity<Object> handleProductNotCreatedException(ProductNotFoundException e, WebRequest webRequest){
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Product not created");
-        log.error(e.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(DeliveryInformationNotCreatedException.class)
-    public ResponseEntity<Object> handleDeliveryInformationNotCreatedException(DeliveryInformationNotFoundException e,
-                                                                       WebRequest webRequest){
-
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("message", "Delivery information not created");
-        log.error(e.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(NoProductDataException.class)
     public ResponseEntity<Object> handleNoProductDataException(NoProductDataException e, WebRequest webRequest){
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "No products found");
+        log.error(e.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(VATCalculationException.class)
+    public ResponseEntity<Object> handleVATCalculationException(VATCalculationException e, WebRequest webRequest){
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

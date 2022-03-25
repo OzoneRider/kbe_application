@@ -25,7 +25,6 @@ public class CSVExportService {
     public void exportCsvToFolder(){
         String path = System.getProperty("java.io.tmpdir");
         File file = new File(path, "products.csv");
-
         List<Product> products = productService.getProducts();
 
         try{
