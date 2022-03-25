@@ -43,11 +43,15 @@ public class ApplicationController {
 
     @GetMapping("products")
     public ResponseEntity<List<Product>> getAllProducts(){
-
         List<Product> products = productService.getProducts();;
 
-        if(products.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @GetMapping("products/search")
+    public ResponseEntity<List<Product>> findByName(@RequestParam("name") String name){
+        List<Product> products = productService.searchByName(name);
+
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
