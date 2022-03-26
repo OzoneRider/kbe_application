@@ -16,7 +16,7 @@ public class CalculatorService {
     private final String URL = "http://localhost:4441/vat";
 
     public VAT calculateVAT(Product product) throws VATCalculationException {
-        VAT vat = restTemplate.getForObject(URL+"?price="+product.getPriceEuro(), VAT.class);
+        VAT vat = restTemplate.getForObject(URL+"?price="+ product.getPriceEuro(), VAT.class);
         if(vat == null)
             throw new VATCalculationException(product.getPriceEuro());
 

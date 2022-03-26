@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductInformation {
+public class ProductDetails {
 
     @NotNull
     private Product product;

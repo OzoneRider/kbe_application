@@ -4,7 +4,6 @@ import com.kbe.application.exceptions.NoProductDataException;
 import com.kbe.application.exceptions.ProductNotFoundException;
 import com.kbe.application.models.Product;
 import com.kbe.application.repository.ProductRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +50,8 @@ public class ProductService {
     public ResponseEntity<?> saveProduct(Product product){
         productRepository.saveProduct(product);
 
-        if(productRepository.getProductById(product.getProductId()) == null)
-            throw new ProductNotFoundException(product.getProductId());
+        if(productRepository.getProductById(product.getId()) == null)
+            throw new ProductNotFoundException(product.getId());
 
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
@@ -60,8 +59,8 @@ public class ProductService {
     public ResponseEntity<?> updateProduct(Product product){
         productRepository.updateProduct(product);
 
-        if(productRepository.getProductById(product.getProductId()) == null)
-            throw new ProductNotFoundException(product.getProductId());
+        if(productRepository.getProductById(product.getId()) == null)
+            throw new ProductNotFoundException(product.getId());
 
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }

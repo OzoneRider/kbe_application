@@ -16,7 +16,7 @@ public class StorageService {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final String URL = "http://localhost:4442/delivery-information";
+    private final String URL = "http://localhost:4442/api/delivery-information";
 
     public DeliveryInformation importDeliveryInformation(int id) throws DeliveryInformationNotFoundException{
         DeliveryInformation info = restTemplate.getForObject(URL+"/"+id, DeliveryInformation.class);
@@ -43,8 +43,8 @@ public class StorageService {
         }
     }
 
-    public ResponseEntity<?> updateDeliveryInformation(int id, DeliveryInformation info){
-        String requestURL = URL+"/"+id;
+    public ResponseEntity<?> updateDeliveryInformation(DeliveryInformation info){
+        String requestURL = URL+"/"+info.getId();
         HttpEntity<DeliveryInformation> entity = new HttpEntity<>(info, restTemplate.headForHeaders(requestURL));
         try{
             ResponseEntity<DeliveryInformation> response = restTemplate.exchange(requestURL, HttpMethod.PUT, entity, DeliveryInformation.class);

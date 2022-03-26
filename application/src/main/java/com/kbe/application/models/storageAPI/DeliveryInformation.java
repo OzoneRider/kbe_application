@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class DeliveryInformation {
 
     @Min(0)
-    private int productId;
+    private int id;
 
     @Min(1)
     @Max(100)
@@ -61,7 +61,7 @@ public class DeliveryInformation {
     @Override
     public String toString(){
 
-        return "{\n\t\"productId\":\""+this.productId+"\",\n" +
+        return "{\n\t\"productId\":\""+this.id +"\",\n" +
                 "\t\"deliveryTimeDays\":\""+this.deliveryTimeDays+"\",\n" +
                 "\t\"amount\":\""+this.amount+"\",\n"+
                 "\t\"location\": "+this.productLocation.toString()+

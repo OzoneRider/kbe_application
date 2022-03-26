@@ -22,27 +22,24 @@ public class CSVExportService {
     @Autowired
     private ProductService productService;
 
-    public void exportCsvToFolder(){
+    public void exportCsvToFolder() throws IOException{
         String path = System.getProperty("java.io.tmpdir");
         File file = new File(path, "products.csv");
         List<Product> products = productService.getProducts();
 
-        try{
-            FileWriter fileWriter = new FileWriter(file);
-            ICsvBeanWriter csvWriter = new CsvBeanWriter(fileWriter, CsvPreference.STANDARD_PREFERENCE);
-            String[] csvHeader = {"productId", "name", "priceEuro", "manufacturer", "displaySizeInches", "color",
-                                  "refreshRateHz", "weightKg", "reactionTimeMs", "displayInterface", "resolution"};
-            String[] nameMapping = {"productId", "name", "priceEuro", "manufacturer", "displaySizeInches", "color",
-                                    "refreshRateHz", "weightKg", "reactionTimeMs", "displayInterface", "resolution"};
+        FileWriter fileWriter = new FileWriter(file);
+        ICsvBeanWriter csvWriter = new CsvBeanWriter(fileWriter, CsvPreference.STANDARD_PREFERENCE);
+        String[] csvHeader = {"id", "name", "priceEuro", "manufacturer", "displaySizeInches", "color",
+                "refreshRateHz", "weightKg", "reactionTimeMs", "displayInterface", "resolution"};
+        String[] nameMapping = {"id", "name", "priceEuro", "manufacturer", "displaySizeInches", "color",
+                "refreshRateHz", "weightKg", "reactionTimeMs", "displayInterface", "resolution"};
 
-            csvWriter.writeHeader(csvHeader);
+        csvWriter.writeHeader(csvHeader);
 
-            for(Product product : products){
-                csvWriter.write(product, nameMapping);
-            }
-            csvWriter.close();
-        }catch (IOException e){
-            log.error(e.getMessage());
+        for(Product product : products){
+            csvWriter.write(product, nameMapping);
         }
+        csvWriter.close();
+
     }
 }

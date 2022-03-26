@@ -1,8 +1,7 @@
 package com.kbe.application.controller;
 
-import com.kbe.application.exceptions.*;
 import com.kbe.application.models.Product;
-import com.kbe.application.models.ProductInformation;
+import com.kbe.application.models.ProductDetails;
 import com.kbe.application.models.calculatorAPI.VAT;
 import com.kbe.application.models.externalAPI.GeoCode;
 import com.kbe.application.models.storageAPI.DeliveryInformation;
@@ -17,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -43,27 +42,27 @@ public class ApplicationController {
 
     @GetMapping("products")
     public ResponseEntity<List<Product>> getAllProducts(){
-        List<Product> products = productService.getProducts();;
+        List<Product> productList = productService.getProducts();;
 
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @GetMapping("products/search")
     public ResponseEntity<List<Product>> findByName(@RequestParam("name") String name){
-        List<Product> products = productService.searchByName(name);
+        List<Product> productList = productService.searchByName(name);
 
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @GetMapping("products/{id}")
-    public ResponseEntity<ProductInformation> getProductInformation(@PathVariable("id") Integer id){
+    public ResponseEntity<ProductDetails> getProductInformation(@PathVariable("id") Integer id){
         Product product = productService.getProductById(id);
         DeliveryInformation info = storageService.importDeliveryInformation(id);
         VAT vat = calculatorService.calculateVAT(product);
         LocalDate deliveryDate = deliveryDateService.getDeliveryDate(info.getDeliveryTimeDays());
-        ProductInformation productInformation = new ProductInformation(product, info, vat.getVatPrice(), deliveryDate);
+        ProductDetails productDetails = new ProductDetails(product, info, vat.getVatPrice(), deliveryDate);
 
-        return new ResponseEntity<>(productInformation, HttpStatus.OK);
+        return new ResponseEntity<>(productDetails, HttpStatus.OK);
     }
 
     @GetMapping("products/{id}/delivery-information/geo")
@@ -73,18 +72,30 @@ public class ApplicationController {
         return mapService.getGeoCoordinates(deliveryInformation.getProductLocation());
     }
 
+    @GetMapping("products/export")
+    public ResponseEntity<?> exportProductsToCSV(){
+        try{
+            csvExportService.exportCsvToFolder();
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(IOException e){
+            log.error(e.getMessage());
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping("products")
     public ResponseEntity<?> postProduct(@Valid @RequestBody Product product){
         ResponseEntity<?> response = productService.saveProduct(product);
-        csvExportService.exportCsvToFolder();
 
         return response;
     }
 
     @PostMapping("products/{id}/delivery-information")
-    public ResponseEntity<?> deliveryInformation(@Valid @RequestBody DeliveryInformation info,
+    public ResponseEntity<?> createDeliveryInformation(@Valid @RequestBody DeliveryInformation info,
                                                    @PathVariable("id") Integer id){
-      return storageService.exportDeliveryInformation(info);
+        if(id != info.getId())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return storageService.exportDeliveryInformation(info);
 
     }
 
@@ -96,7 +107,9 @@ public class ApplicationController {
     @PutMapping("products/{id}/delivery-information")
     public ResponseEntity<?> updateDeliveryInformation(@Valid @RequestBody DeliveryInformation info,
                                                          @PathVariable("id") Integer id){
-        return storageService.updateDeliveryInformation(id, info);
+        if(id != info.getId())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return storageService.updateDeliveryInformation(info);
     }
 
 }

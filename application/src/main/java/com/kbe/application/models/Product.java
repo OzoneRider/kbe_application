@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class Product implements Serializable {
 
     @Min(0)
-    private int productId;
+    private int id;
 
     @NotNull
     private String name;

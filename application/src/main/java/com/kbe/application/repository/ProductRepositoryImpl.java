@@ -17,7 +17,7 @@ public class ProductRepositoryImpl implements ProductRepository{
 
     @Override
     public void saveProduct(Product product) {
-        hashOperations.putIfAbsent(hashReference,product.getProductId(), product);
+        hashOperations.putIfAbsent(hashReference, product.getId(), product);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ProductRepositoryImpl implements ProductRepository{
 
     @Override
     public void updateProduct(Product product) {
-        hashOperations.put(hashReference, product.getProductId(), product);
+        hashOperations.put(hashReference, product.getId(), product);
     }
 
     @Override
