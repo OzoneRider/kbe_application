@@ -11,11 +11,13 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class MapService {
 
-    @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     private final String URL = "https://nominatim.openstreetmap.org/search?q=";
 
+    public MapService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public ResponseEntity<GeoCode> getGeoCoordinates(Location location){
         String requestURL = queryBuilder(location);

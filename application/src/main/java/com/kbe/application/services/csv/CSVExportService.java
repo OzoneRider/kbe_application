@@ -19,8 +19,11 @@ import java.util.List;
 @CommonsLog
 public class CSVExportService {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
+
+    public CSVExportService(ProductService productService) {
+        this.productService = productService;
+    }
 
     public void exportCsvToFolder() throws IOException{
         String path = System.getProperty("java.io.tmpdir");

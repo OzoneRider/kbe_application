@@ -2,24 +2,19 @@ package com.kbe.application.controller;
 
 import com.kbe.application.models.Product;
 import com.kbe.application.models.ProductDetails;
-import com.kbe.application.models.calculatorAPI.VAT;
 import com.kbe.application.models.externalAPI.GeoCode;
 import com.kbe.application.models.storageAPI.DeliveryInformation;
-import com.kbe.application.services.DeliveryDateService;
+import com.kbe.application.services.ProductDetailService;
 import com.kbe.application.services.ProductService;
-import com.kbe.application.services.calculatorAPI.CalculatorService;
-import com.kbe.application.services.csv.CSVExportService;
 import com.kbe.application.services.externalAPI.MapService;
 import com.kbe.application.services.storageAPI.StorageService;
 import lombok.extern.apachecommons.CommonsLog;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -27,18 +22,18 @@ import java.util.List;
 @CommonsLog
 public class ApplicationController {
 
-    @Autowired
-    CalculatorService calculatorService;
-    @Autowired
-    ProductService productService;
-    @Autowired
-    StorageService storageService;
-    @Autowired
-    CSVExportService csvExportService;
-    @Autowired
-    MapService mapService;
-    @Autowired
-    DeliveryDateService deliveryDateService;
+    private final ProductService productService;
+    private final StorageService storageService;
+    private final MapService mapService;
+    private final ProductDetailService productDetailService;
+
+    public ApplicationController(ProductService productService, StorageService storageService,
+                                 MapService mapService, ProductDetailService productDetailService) {
+        this.productService = productService;
+        this.storageService = storageService;
+        this.mapService = mapService;
+        this.productDetailService = productDetailService;
+    }
 
     @GetMapping("products")
     public ResponseEntity<List<Product>> getAllProducts(){
@@ -56,11 +51,7 @@ public class ApplicationController {
 
     @GetMapping("products/{id}")
     public ResponseEntity<ProductDetails> getProductInformation(@PathVariable("id") Integer id){
-        Product product = productService.getProductById(id);
-        DeliveryInformation info = storageService.importDeliveryInformation(id);
-        VAT vat = calculatorService.calculateVAT(product);
-        LocalDate deliveryDate = deliveryDateService.getDeliveryDate(info.getDeliveryTimeDays());
-        ProductDetails productDetails = new ProductDetails(product, info, vat.getVatPrice(), deliveryDate);
+        ProductDetails productDetails = productDetailService.getProductDetails(id);
 
         return new ResponseEntity<>(productDetails, HttpStatus.OK);
     }
@@ -70,17 +61,6 @@ public class ApplicationController {
         DeliveryInformation deliveryInformation = storageService.importDeliveryInformation(id);
 
         return mapService.getGeoCoordinates(deliveryInformation.getProductLocation());
-    }
-
-    @GetMapping("products/export")
-    public ResponseEntity<?> exportProductsToCSV(){
-        try{
-            csvExportService.exportCsvToFolder();
-            return new ResponseEntity<>(HttpStatus.OK);
-        }catch(IOException e){
-            log.error(e.getMessage());
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("products")

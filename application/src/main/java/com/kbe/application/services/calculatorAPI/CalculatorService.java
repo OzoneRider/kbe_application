@@ -10,10 +10,13 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CalculatorService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     private final String URL = "http://localhost:4441/vat";
+
+    public CalculatorService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public VAT calculateVAT(Product product) throws VATCalculationException {
         VAT vat = restTemplate.getForObject(URL+"?price="+ product.getPriceEuro(), VAT.class);

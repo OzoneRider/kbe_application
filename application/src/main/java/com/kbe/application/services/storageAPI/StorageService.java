@@ -13,10 +13,13 @@ import org.springframework.web.client.RestTemplate;
 @CommonsLog
 public class StorageService {
 
-    @Autowired
     private RestTemplate restTemplate;
 
     private final String URL = "http://localhost:4442/api/delivery-information";
+
+    public StorageService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public DeliveryInformation importDeliveryInformation(int id) throws DeliveryInformationNotFoundException{
         DeliveryInformation info = restTemplate.getForObject(URL+"/"+id, DeliveryInformation.class);
