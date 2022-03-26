@@ -8,6 +8,7 @@ import com.kbe.application.services.ProductDetailService;
 import com.kbe.application.services.ProductService;
 import com.kbe.application.services.externalAPI.MapService;
 import com.kbe.application.services.storageAPI.StorageService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/")
 @CommonsLog
+@RequiredArgsConstructor
 public class ApplicationController {
 
     private final ProductService productService;
@@ -27,13 +29,6 @@ public class ApplicationController {
     private final MapService mapService;
     private final ProductDetailService productDetailService;
 
-    public ApplicationController(ProductService productService, StorageService storageService,
-                                 MapService mapService, ProductDetailService productDetailService) {
-        this.productService = productService;
-        this.storageService = storageService;
-        this.mapService = mapService;
-        this.productDetailService = productDetailService;
-    }
 
     @GetMapping("products")
     public ResponseEntity<List<Product>> getAllProducts(){

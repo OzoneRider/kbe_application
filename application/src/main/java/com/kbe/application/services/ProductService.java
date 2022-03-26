@@ -4,6 +4,7 @@ import com.kbe.application.exceptions.NoProductDataException;
 import com.kbe.application.exceptions.ProductNotFoundException;
 import com.kbe.application.models.Product;
 import com.kbe.application.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     public List<Product> getProducts(){
         Map<Integer, Product> map = productRepository.getAllProducts();

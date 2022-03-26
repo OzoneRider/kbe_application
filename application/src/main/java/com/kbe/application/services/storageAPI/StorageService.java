@@ -2,6 +2,7 @@ package com.kbe.application.services.storageAPI;
 
 import com.kbe.application.exceptions.DeliveryInformationNotFoundException;
 import com.kbe.application.models.storageAPI.DeliveryInformation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -11,15 +12,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @CommonsLog
+@RequiredArgsConstructor
 public class StorageService {
 
     private RestTemplate restTemplate;
 
     private final String URL = "http://localhost:4442/api/delivery-information";
 
-    public StorageService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     public DeliveryInformation importDeliveryInformation(int id) throws DeliveryInformationNotFoundException{
         DeliveryInformation info = restTemplate.getForObject(URL+"/"+id, DeliveryInformation.class);

@@ -2,6 +2,7 @@ package com.kbe.application.services.externalAPI;
 
 import com.kbe.application.models.externalAPI.GeoCode;
 import com.kbe.application.models.storageAPI.Location;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,15 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 public class MapService {
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     private final String URL = "https://nominatim.openstreetmap.org/search?q=";
-
-    public MapService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     public ResponseEntity<GeoCode> getGeoCoordinates(Location location){
         String requestURL = queryBuilder(location);

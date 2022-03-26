@@ -3,6 +3,7 @@ package com.kbe.application.services.csv;
 
 import com.kbe.application.models.Product;
 import com.kbe.application.services.ProductService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,10 @@ import java.util.List;
 
 @Service
 @CommonsLog
+@RequiredArgsConstructor
 public class CSVExportService {
 
     private final ProductService productService;
-
-    public CSVExportService(ProductService productService) {
-        this.productService = productService;
-    }
 
     public void exportCsvToFolder() throws IOException{
         String path = System.getProperty("java.io.tmpdir");

@@ -1,6 +1,7 @@
 package com.kbe.application.controller;
 
 import com.kbe.application.services.csv.CSVExportService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +14,10 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/export/")
 @CommonsLog
+@RequiredArgsConstructor
 public class CsvExportController {
 
     private final CSVExportService csvExportService;
-
-    public CsvExportController(CSVExportService csvExportService) {
-        this.csvExportService = csvExportService;
-    }
 
     @GetMapping("products")
     public ResponseEntity<?> exportProductsToCSV(){
