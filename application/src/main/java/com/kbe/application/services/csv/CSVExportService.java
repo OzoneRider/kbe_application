@@ -23,9 +23,9 @@ public class CSVExportService {
 
     private final ProductService productService;
 
-    public void exportCsvToFolder() throws IOException{
+    public void exportCsvToFolder(String fileName) throws IOException{
         String path = System.getProperty("java.io.tmpdir");
-        File file = new File(path, "products.csv");
+        File file = new File(path, fileName);
         List<Product> products = productService.getProducts();
 
         FileWriter fileWriter = new FileWriter(file);

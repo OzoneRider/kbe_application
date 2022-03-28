@@ -87,4 +87,9 @@ public class ApplicationController {
         return storageService.updateDeliveryInformation(info);
     }
 
+    @DeleteMapping("products/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("id") Integer id){
+        return productService.deleteProduct(id);
+    }
+
 }

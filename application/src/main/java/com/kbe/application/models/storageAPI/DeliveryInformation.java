@@ -61,7 +61,7 @@ public class DeliveryInformation {
     @Override
     public String toString(){
 
-        return "{\n\t\"productId\":\""+this.id +"\",\n" +
+        return "{\n\t\"id\":\""+this.id +"\",\n" +
                 "\t\"deliveryTimeDays\":\""+this.deliveryTimeDays+"\",\n" +
                 "\t\"amount\":\""+this.amount+"\",\n"+
                 "\t\"location\": "+this.productLocation.toString()+

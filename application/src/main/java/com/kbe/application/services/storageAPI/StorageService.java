@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class StorageService {
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     private final String URL = "http://localhost:4442/api/delivery-information";
 

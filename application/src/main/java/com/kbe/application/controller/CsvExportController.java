@@ -22,7 +22,7 @@ public class CsvExportController {
     @GetMapping("products")
     public ResponseEntity<?> exportProductsToCSV(){
         try{
-            csvExportService.exportCsvToFolder();
+            csvExportService.exportCsvToFolder("products.csv");
             return new ResponseEntity<>(HttpStatus.OK);
         }catch(IOException e){
             log.error(e.getMessage());
